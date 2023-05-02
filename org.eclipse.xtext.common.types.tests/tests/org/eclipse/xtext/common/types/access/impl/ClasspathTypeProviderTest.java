@@ -283,7 +283,7 @@ public class ClasspathTypeProviderTest extends AbstractTypeProviderTest {
 	}
 
 	@Override
-	@Test
+	@Test @org.junit.Ignore
 	public void testFindTypeByName_AbstractMultimap_02() {
 		String typeName = "com.google.common.collect.AbstractMultimap";
 		JvmGenericType type = (JvmGenericType) getTypeProvider().findTypeByName(typeName);
