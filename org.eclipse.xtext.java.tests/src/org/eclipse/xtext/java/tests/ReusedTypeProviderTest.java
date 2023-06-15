@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2015, 2020 itemis AG (http://www.itemis.eu) and others.
+ * Copyright (c) 2015, 2023 itemis AG (http://www.itemis.eu) and others.
  * This program and the accompanying materials are made available under the
  * terms of the Eclipse Public License 2.0 which is available at
  * http://www.eclipse.org/legal/epl-2.0.
@@ -16,10 +16,13 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.xtext.build.BuildRequest;
 import org.eclipse.xtext.build.IncrementalBuilder;
 import org.eclipse.xtext.build.IndexState;
 import org.eclipse.xtext.build.Source2GeneratedMapping;
+import org.eclipse.xtext.common.types.JvmAnnotationReference;
+import org.eclipse.xtext.common.types.JvmAnnotationType;
 import org.eclipse.xtext.common.types.JvmFormalParameter;
 import org.eclipse.xtext.common.types.JvmGenericType;
 import org.eclipse.xtext.common.types.JvmOperation;
@@ -41,7 +44,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import com.google.common.collect.Iterables;
-import com.google.common.collect.Lists;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 
@@ -119,8 +121,6 @@ public class ReusedTypeProviderTest extends AbstractTypeProviderTest {
 
 	@Test
 	@Override
-	@Ignore // TODO find proper replacement or adapt test to accept 1 (checkForNull is visible now)
-	// https://github.com/eclipse/xtext-extras/commit/e18d7fc35d2ebdbc8dcc3d057e0c3d3047916dc5
 	public void testFindTypeByName_AbstractMultimap_02() {
 		String typeName = "com.google.common.collect.AbstractMultimap";
 		JvmGenericType type = (JvmGenericType) getTypeProvider().findTypeByName(typeName);
@@ -128,7 +128,10 @@ public class ReusedTypeProviderTest extends AbstractTypeProviderTest {
 				.getOnlyElement(type.findAllFeaturesByName("containsValue"));
 		Assert.assertNotNull(containsValue);
 		JvmFormalParameter firstParam = containsValue.getParameters().get(0);
-		Assert.assertEquals(Lists.transform(firstParam.getAnnotations(), (e)->e.getAnnotation().getIdentifier()) +"", 0, firstParam.getAnnotations().size());
+		assertEquals(1, firstParam.getAnnotations().size());
+		JvmAnnotationReference annotationReference = firstParam.getAnnotations().get(0);
+		JvmAnnotationType annotationType = annotationReference.getAnnotation();
+		assertEquals("java:/Objects/javax.annotation.CheckForNull", EcoreUtil.getURI(annotationType).trimFragment().toString());
 	}
 
 	@Test
