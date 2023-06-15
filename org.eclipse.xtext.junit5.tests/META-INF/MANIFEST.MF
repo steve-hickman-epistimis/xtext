@@ -25,7 +25,7 @@ Require-Bundle: org.eclipse.xtext,
  org.junit;bundle-version="4.13.2",
  org.aopalliance;bundle-version="1.0.0",
  com.google.inject;bundle-version="7.0.0";visibility:=reexport,
- com.google.guava;bundle-version="31.1.0"
+ com.google.guava;bundle-version="[32.0.1,33.0.0)"
 Bundle-ActivationPolicy: lazy
 Bundle-ClassPath: .
 Import-Package: org.apache.commons.logging;version="1.2.0",
